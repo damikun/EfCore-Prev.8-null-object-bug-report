@@ -23,8 +23,6 @@ namespace WebApi.Controllers {
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult> Test() {
 
-            List<long> keys = new List<long>();
-
             List<User_DTO> db_enity = await _context.Users.AsNoTracking()
             .Include(e=>e.Role)
             .Select(e=> new User_DTO(){
