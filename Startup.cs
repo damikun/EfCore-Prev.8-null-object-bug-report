@@ -1,35 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Aplication.Interfaces;
-using Domain.Core.Models;
 using Presistence;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection;
-using HotChocolate;
-using Aplication.GraphQL.Types;
-using HotChocolate.Execution;
-using HotChocolate.Execution.Configuration;
-using HotChocolate.Types;
-using Microsoft.AspNetCore.Http;
-using System.Reflection;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using HotChocolate.AspNetCore;
+
 
 namespace HC_Pagination_Bug
 {
@@ -57,19 +35,6 @@ namespace HC_Pagination_Bug
                 "Data Source=" + Configuration["SQLiteDatabase:Name"]
                 ));
 
-            services.AddGraphQL(sp =>
-            SchemaBuilder.New()
-            .AddServices(sp)
-            .AddQueryType<Querry>()
-            .AddType<UserType>()
-            
-            .Create(), new QueryExecutionOptions { ForceSerialExecution = true }).AddErrorFilter(error => {
-
-                Console.WriteLine(error.Exception);
-
-                return error;
-            });
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -94,12 +59,12 @@ namespace HC_Pagination_Bug
 
             app.UseAuthorization();
 
-            app.UseGraphQL();
+            app.UseEndpoints(endpoints => {
 
-            app.UsePlayground();
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller}/{action=Index}/{id?}");
 
-            app.UseEndpoints(endpoints =>
-            {
                 endpoints.MapControllers();
             });
         }
